@@ -1,7 +1,9 @@
 package com.Sachin.CustomerManagement.Service.Order;
 
 import com.Sachin.CustomerManagement.Dto.OrderDto;
+import com.Sachin.CustomerManagement.Repository.CustomerRepository;
 import com.Sachin.CustomerManagement.Repository.OrderRepository;
+import com.Sachin.CustomerManagement.VO.Customer;
 import com.Sachin.CustomerManagement.VO.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @Override
@@ -24,23 +29,46 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order createOrder(Order order) {
-        int qty = order.getQuantity();
-        Double price = order.getAmount();
+    public Order createOrder(OrderDto orderDto) {
+
+        Customer customer = customerRepository.findById(orderDto.getCustomerId()).get();
+
+        int qty = orderDto.getQuantity();
+        Double price = orderDto.getAmount();
         Double total = qty*price;
+
+        Order order = new Order();
+        order.setCustomer(customer);
+        order.setAmount(orderDto.getAmount());
+        order.setQuantity(orderDto.getQuantity());
+        order.setStatus(orderDto.getStatus());
+        order.setProductName(orderDto.getProductName());
         order.setBillPrice(total);
+
+
+
+
+
         return orderRepository.save(order);
     }
 
     @Override
-    public Order updateOrder(Order order, long Id) {
+    public Order updateOrder(OrderDto orderDto, long Id) {
+
+        Customer customer = customerRepository.findById(orderDto.getCustomerId()).get();
+
+        int qty = orderDto.getQuantity();
+        Double price = orderDto.getAmount();
+        Double total = qty*price;
+
         Order oldOrder = orderRepository.findById(Id).orElseThrow(
                 ()-> new RuntimeException("Order not found for this id"));
-        oldOrder.setAmount(order.getAmount());
-        oldOrder.setCustomer(order.getCustomer());
-        oldOrder.setStatus(order.getStatus());
-        oldOrder.setProductName(order.getProductName());
-        oldOrder.setQuantity(order.getQuantity());
+        oldOrder.setAmount(orderDto.getAmount());
+        oldOrder.setCustomer(customer);
+        oldOrder.setStatus(orderDto.getStatus());
+        oldOrder.setProductName(orderDto.getProductName());
+        oldOrder.setQuantity(orderDto.getQuantity());
+        oldOrder.setBillPrice(total);
 
         return  orderRepository.save(oldOrder);
 

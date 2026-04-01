@@ -36,6 +36,7 @@ public class OrderController {
             orderDto.setAmount(order.getAmount());
             orderDto.setProductName(order.getProductName());
             orderDto.setCustomerName(order.getCustomer().getName());
+            orderDto.setBillPrice(order.getBillPrice());
 
             return orderDto;
 
@@ -51,13 +52,14 @@ public class OrderController {
 
     //put
     @PutMapping("/update/{id}")
-    public ResponseEntity<Order> updateOrder(@RequestBody Order order,@PathVariable long id){
-        return new ResponseEntity<>(orderService.updateOrder(order,id), HttpStatus.OK);
+    public ResponseEntity<Order> updateOrder(@PathVariable long id,@RequestBody OrderDto orderDto){
+        return new ResponseEntity<>(orderService.updateOrder(orderDto,id), HttpStatus.OK);
     }
     //create
     @PostMapping("/create")
-    public ResponseEntity<Order> createOrder(@RequestBody Order order){
-        return new ResponseEntity<>(orderService.createOrder(order), HttpStatus.CREATED);
+    public ResponseEntity<Order> createOrder(@RequestBody OrderDto orderDto){
+
+        return new ResponseEntity<>(orderService.createOrder(orderDto), HttpStatus.CREATED);
     }
 
     //delete

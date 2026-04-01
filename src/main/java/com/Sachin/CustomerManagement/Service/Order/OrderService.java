@@ -11,10 +11,10 @@ public interface OrderService {
     public List<Order> getAllOrder();
 
     //post
-    public Order createOrder(Order order);
+    public Order createOrder(OrderDto order);
 
     //put
-    public Order updateOrder(Order order,long Id);
+    public Order updateOrder(OrderDto order,long Id);
 
     //delete
     public void deleteOrder(long Id);

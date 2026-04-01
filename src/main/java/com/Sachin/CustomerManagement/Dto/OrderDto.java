@@ -13,7 +13,7 @@ public class OrderDto {
     private orderStatus status;
     private long customerId;
     private String customerName;
-
+    private  double billPrice;
     // Optional, include only needed fields
 }
 
